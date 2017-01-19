@@ -1,0 +1,179 @@
+<Html>
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script>
+        var progressions2 = {"C Major": "Dm<sup>7</sup>, G<sup>7</sup>, C&#8710<sup>7</sup>",
+                            "Db Major": "E&#9837m<sup>7</sup>, A&#9837<sup>7</sup>, D&#9837&#8710<sup>7</sup>",
+                            "D Major": "Em<sup>7</sup>, A<sup>7</sup>, D&#8710<sup>7</sup>",
+                            "Eb Major": "Fm<sup>7</sup>, B&#9837<sup>7</sup>, E&#9837&#8710<sup>7</sup>",
+                            "E Major": "F&#9839m<sup>7</sup>, B<sup>7</sup>, E&#8710<sup>7</sup>",
+                            "F Major": "Gm<sup>7</sup>, C<sup>7</sup>, F&#8710<sup>7</sup>",
+                            "F# Major": "G&#9839m<sup>7</sup>, C&#9839<sup>7</sup>, F&#9839&#8710<sup>7</sup>",
+                            "G Major": "Am<sup>7</sup>, D<sup>7</sup>, G&#8710<sup>7</sup>",
+                            "Ab Major": "B&#9837m<sup>7</sup>, E&#9837<sup>7</sup>, A&#9837&#8710<sup>7</sup>",
+                            "A Major": "Bm<sup>7</sup>, E<sup>7</sup>, A&#8710<sup>7</sup>",
+                            "Bb Major": "Cm<sup>7</sup>, F<sup>7</sup>, B&#9837&#8710<sup>7</sup>",
+                            "B Major": "C&#9839m<sup>7</sup>, F&#9839<sup>7</sup>, B&#8710<sup>7</sup>"}
+        
+        var progressions = {"C Major": "Dm<sup>7</sup>     G<sup>7</sup>     C&#8710<sup>7</sup>",
+                    "Db Major": "E&#9837m<sup>7</sup>     A&#9837<sup>7</sup>     D&#9837&#8710<sup>7</sup>",
+                    "D Major": "Em<sup>7</sup>     A<sup>7</sup>     D&#8710<sup>7</sup>",
+                    "Eb Major": "Fm<sup>7</sup>     B&#9837<sup>7</sup>     E&#9837&#8710<sup>7</sup>",
+                    "E Major": "F&#9839m<sup>7</sup>     B<sup>7</sup>     E&#8710<sup>7</sup>",
+                    "F Major": "Gm<sup>7</sup>     C<sup>7</sup>     F&#8710<sup>7</sup>",
+                    "F# Major": "G&#9839m<sup>7</sup>     C&#9839<sup>7</sup>     F&#9839&#8710<sup>7</sup>",
+                    "G Major": "Am<sup>7</sup>     D<sup>7</sup>     G&#8710<sup>7</sup>",
+                    "Ab Major": "B&#9837m<sup>7</sup>     E&#9837<sup>7</sup>     A&#9837&#8710<sup>7</sup>",
+                    "A Major": "Bm<sup>7</sup>     E<sup>7</sup>     A&#8710<sup>7</sup>",
+                    "Bb Major": "Cm<sup>7</sup>     F<sup>7</sup>     B&#9837&#8710<sup>7</sup>",
+                    "B Major": "C&#9839m<sup>7</sup>     F&#9839<sup>7</sup>     B&#8710<sup>7</sup>"}
+        
+        //var letters = ["A", "B#9837", "B", "C", "C#", "D#9837", "D", "E#9837"
+        var letters = ["D", "G", "C", "E&#9837", "A&#9837", "D&#9837", "E", "A", "F", "B&#9837", "F&#9839", "B",
+                       "G&#9839", "C&#9839"]
+                       
+        var qualities = ["m<sup>7</sup>", "<sup>7</sup>", "&#8710<sup>7</sup>"];
+        
+        var keys = Object.keys(progressions);
+        
+        var usedProgressions = [];
+        
+        var progression;
+        var key;
+        var resetButon;
+        
+        var usedChords = {};
+        
+        function start() {
+            console.log("letters length: ", letters.length);
+            console.log("usedChords.length: ", Object.keys(usedChords).length);
+
+            progression = document.getElementById("progression");
+            key = document.getElementById("key");
+            
+            document.body.addEventListener("click", getNewChord);
+            document.body.addEventListener("touchstart", getNewChord);
+            
+            resetButton = document.getElementById("reset");
+            resetButton.addEventListener("click", reset);
+            resetButton.addEventListener("touchstart", reset);
+        }
+        
+        function reset() {
+            usedChords = {};
+            document.body.addEventListener("click", getNewChord);
+            document.body.addEventListener("touchstart", getNewChord);
+            resetButton.style.display = "none";
+        }
+        
+        function getNewChord() {
+            if (Object.keys(usedChords).length == letters.length * qualities.length) {
+                key.innerHTML = "You've completed all chords!";
+                progression.innerHTML = "Click Reset to start over";
+                resetButton.style.display = "block";
+                document.removeEventListener("click", getNewChord);
+                document.removeEventListener("touchstart", getNewChord);
+                console.log("usedChords.length: ", Object.keys(usedChords).length);
+                return;
+            }
+            
+            //console.log(Math.random() * letters.length);
+            var lettersIndex = Math.floor(Math.random() * letters.length);
+            var letter = letters[lettersIndex];
+            var qualityIndex = Math.floor(Math.random() * qualities.length);
+            var quality = qualities[qualityIndex];
+            
+            var chord = letter + quality;
+            if (usedChords.hasOwnProperty(chord)) {
+                return getNewChord();
+            } else {
+                usedChords[chord] = 1;
+            }
+            progression.innerHTML = chord;
+        }
+
+    </script>
+    
+    <style>
+        p {
+            text-align: center;
+        }
+        
+        div#header {
+            text-align: center;
+            font-size: 2em;
+        }
+        
+        div#key {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 1em;
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#progression {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 3em;
+            white-space: pre;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#reset {
+            text-align: center;
+            align-content: center;
+            background-color: lightblue;
+            background-clip: content-box;
+            cursor: pointer;
+            width: 100px;
+            margin: auto;
+            display: none;
+            font-size: 1.5em;
+            margin: 0;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        p#notes {
+            text-align: center;
+            font-size: .75em;
+            color: gray;
+            transform: translate(0%, 80%);
+            margin: 0;
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+    </style>
+</head>
+<body onload="start()">
+    <div id="header">Common Jazz Chords</div>
+    <div id="key"></div>
+    <div id="progression">Click or tap to begin</div>
+    <div id="reset">Reset</div>
+    
+    <!--
+    <p> C&#9651 7</p>
+    <p> C&#9653 7</p>
+    <p> C&#8710<sup>7</sup></p>
+    <p>E&#9837m7, A&#9837 7, D&#9837&#8710 7</p>
+    -->
+    <p id="notes">This app displays a randomly selected chord. It keeps track of which ones you've seen so the same chord isn't displayed more than once. Programmed by Daniel Sabsay.</p>
+
+
+</body>
+</Html>
