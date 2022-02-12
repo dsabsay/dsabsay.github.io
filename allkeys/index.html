@@ -1,0 +1,140 @@
+<Html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script>
+      const sev = '<sup>7</sup>';
+      const flat5 = '<sup>&#9837;5</sup>';
+      const flat9 = '<sup>&#9837;9</sup>';
+      const sharp = '<sup>&#9839;</sup>';
+      const flat = '<sup>&#9837;</sup>';
+
+      const keysStatic = [
+        `C`, `C${sharp}`, `D`, `E${flat}`, `E`, `F`, `F${sharp}`, `G`, `A${flat}`, `A`, `B${flat}`, `B`,
+      ];
+      var keys = [...keysStatic];
+
+      var progression;
+      var key;
+      var resetButon;
+      
+      function prevDefault(func) {
+          return function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            func(e)
+            return false;
+          }
+      }
+
+      function start() {
+          progression = document.getElementById("progression");
+          key = document.getElementById("key");
+          
+          document.body.addEventListener("click", prevDefault(getNewProgression));
+          
+          resetButton = document.getElementById("reset");
+          resetButton.addEventListener("click", reset);
+      }
+      
+      function reset() {
+          keys = [...keysStatic];
+          resetButton.style.display = "none";
+          key.innerHTML = '';
+      }
+      
+      function getNewProgression() {
+          if (keys.length == 0) {
+              key.innerHTML = "You've completed all keys!";
+              progression.innerHTML = "Click Reset to start over";
+              resetButton.style.display = "block";
+              return;
+          }
+          
+          console.log(Math.random() * keys.length);
+          var index = Math.floor(Math.random() * keys.length);
+          var k = keys[index];
+          progression.innerHTML = k;
+          
+          keys.splice(index, 1);
+      }
+
+    </script>
+    
+    <style>
+        p {
+            text-align: center;
+        }
+        
+        div#header {
+            text-align: center;
+            font-size: 2em;
+        }
+        
+        div#key {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 1.5em;
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#progression {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 2em;
+            white-space: pre;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#reset {
+            text-align: center;
+            align-content: center;
+            background-color: lightblue;
+            background-clip: content-box;
+            cursor: pointer;
+            width: 100px;
+            margin: auto;
+            display: none;
+            font-size: 1.5em;
+            margin: 0;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        p#notes {
+            text-align: center;
+            font-size: .75em;
+            color: gray;
+            transform: translate(0%, 80%);
+            margin: 0;
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+        
+    </style>
+</head>
+<body onload="start()">
+    <div id="header">Keys</div>
+    <div id="key"></div>
+    <div id="progression">Click or tap to begin</div>
+    <div id="reset">Reset</div>
+    
+    <p id="notes">On every click/tap, a random key is displayed. It keeps track of which ones you've seen so the same key isn't displayed more than once.</p>
+
+
+</body>
+</Html>

@@ -1,0 +1,162 @@
+<Html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script>
+      const sev = '<sup>7</sup>';
+      const flat5 = '<sup>&#9837;5</sup>';
+      const flat9 = '<sup>&#9837;9</sup>';
+      const sharp = '<sup>&#9839;</sup>';
+      const flat = '<sup>&#9837;</sup>';
+
+      var progressions = {
+        'C minor': `Dmin${sev}${flat5}     G${sev}${flat9}     Cmin`,
+        'C# minor': `D${sharp}min${sev}${flat5}     G${sharp}${sev}${flat9}     C${sharp}min`,
+        'D minor': `Emin${sev}${flat5}     A${sev}${flat9}     Dmin`,
+        'Eb minor': `Fmin${sev}${flat5}     B${flat}${sev}${flat9}     E${flat}min`,
+        'E minor': `F${sharp}min${sev}${flat5}     B${sev}${flat9}     Emin`,
+        'F minor': `Gmin${sev}${flat5}     C${sev}${flat9}     Fmin`,
+        'F# minor': `G${sharp}min${sev}${flat5}     C${sharp}${sev}${flat9}     F${sharp}min`,
+        'G minor': `Amin${sev}${flat5}     D${sev}${flat9}     Gmin`,
+        'Ab minor': `B${flat}min${sev}${flat5}     E${flat}${sev}${flat9}     A${flat}min`,
+        'A minor': `Bmin${sev}${flat5}     E${sev}${flat9}     Amin`,
+        'Bb minor': `Cmin${sev}${flat5}     F${sev}${flat9}     B${flat}min`,
+        'B minor': `C${sharp}min${sev}${flat5}     F${sharp}${sev}${flat9}     Bmin`,
+      }
+      
+      var keys = Object.keys(progressions);
+      
+      var usedProgressions = [];
+      
+      var progression;
+      var key;
+      var resetButon;
+      
+      function prevDefault(func) {
+          return function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            func(e)
+            return false;
+          }
+      }
+
+      function start() {
+          progression = document.getElementById("progression");
+          key = document.getElementById("key");
+          
+          document.body.addEventListener("click", prevDefault(getNewProgression));
+          
+          resetButton = document.getElementById("reset");
+          resetButton.addEventListener("click", reset);
+      }
+      
+      function reset() {
+          keys = Object.keys(progressions);
+          resetButton.style.display = "none";
+      }
+      
+      function getNewProgression() {
+          if (keys.length == 0) {
+              key.innerHTML = "You've completed all keys!";
+              progression.innerHTML = "Click Reset to start over";
+              resetButton.style.display = "block";
+              return;
+          }
+          
+          console.log(Math.random() * keys.length);
+          var index = Math.floor(Math.random() * keys.length);
+          var k = keys[index];
+          var p = progressions[k];
+          progression.innerHTML = p;
+          key.innerHTML = k;
+          
+          keys.splice(index, 1);
+          console.log(keys);
+      }
+
+    </script>
+    
+    <style>
+        p {
+            text-align: center;
+        }
+        
+        div#header {
+            text-align: center;
+            font-size: 2em;
+        }
+        
+        div#key {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 1.5em;
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#progression {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            font-size: 2em;
+            white-space: pre;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        div#reset {
+            text-align: center;
+            align-content: center;
+            background-color: lightblue;
+            background-clip: content-box;
+            cursor: pointer;
+            width: 100px;
+            margin: auto;
+            display: none;
+            font-size: 1.5em;
+            margin: 0;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        p#notes {
+            text-align: center;
+            font-size: .75em;
+            color: gray;
+            transform: translate(0%, 80%);
+            margin: 0;
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+        
+    </style>
+</head>
+<body onload="start()">
+    <div id="header">ii-V-i</div>
+    <div id="key"></div>
+    <div id="progression">Click or tap to begin</div>
+    <div id="reset">Reset</div>
+    
+    <!--
+    <p> C&#9651 7</p>
+    <p> C&#9653 7</p>
+    <p> C&#8710<sup>7</sup></p>
+    <p>E&#9837m7, A&#9837 7, D&#9837&#8710 7</p>
+    -->
+    <p id="notes">On every click/tap, a random ii-V-i progression is displayed. It keeps track of which ones you've seen so the same progression isn't displayed more than once.</p>
+
+
+</body>
+</Html>
